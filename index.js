@@ -25,6 +25,14 @@ function inputOperator(operator) {
     calculator.prevType = 'operator';
 }
 
+function inputDecimal(dot) {
+    const {displayValue} = calculator;
+
+    if (!calculator.displayValue.includes(dot)) {
+        calculator.displayValue = calculator.prevType === 'operator' ? displayValue + ' ' + dot : displayValue + dot;
+    }
+    calculator.prevType = 'decimal';
+}
 
 
 updateDisplay();
@@ -45,7 +53,8 @@ keys.addEventListener('click', (event) => {
       }
       
       if (target.classList.contains('decimal')) {
-        console.log('decimal', target.value);
+        inputDecimal(target.value);
+        updateDisplay();
         return;
       }
     
