@@ -5,7 +5,7 @@ const calculator = {
 
 function updateDisplay() {
     const display = document.querySelector('.calculator-screen');
-    display.value = calculator.displayValue;
+    display.innerHTML = calculator.displayValue;
 }
 
 function inputDigit(digit) {
