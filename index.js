@@ -20,8 +20,12 @@ function inputDigit(digit) {
 
 function inputOperator(operator) {
     const {displayValue} = calculator;
+    
+    calculator.displayValue = (calculator.prevType === 'operator')
+        ? displayValue.slice(0, -1) + operator
+        : displayValue + ' ' + operator
+    ;
 
-    calculator.displayValue = displayValue + ' ' + operator;
     calculator.prevType = 'operator';
 }
 
