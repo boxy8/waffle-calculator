@@ -32,12 +32,11 @@ body {
   }
 
   .calculator-screen {
-    /* Scroll to the end */
     justify-content: flex-end;
     display: inline-flex;
     white-space: nowrap;
     overflow: hidden;
-    align-items: center;
+    align-items: flex-end;
 
     width: 100%;
     font-size: 5rem;
