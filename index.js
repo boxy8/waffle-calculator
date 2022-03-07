@@ -1,5 +1,6 @@
 const calculator = {
     displayValue: "0",
+    isEvaluated: true
 };
 
 function updateDisplay() {
@@ -15,10 +16,10 @@ updateDisplay();
 
 function inputDigit(digit) {
     const {displayValue} = calculator;
-
-    calculator.displayValue = (displayValue === "0") 
-        ? digit 
-        : displayValue + digit 
+    console.log("isEvaluted = ", calculator.isEvaluated);
+    calculator.displayValue = (calculator.isEvaluated)    // if expression has been evaluated (or is 0 from beginning)
+        ? digit // then we replace the current number 
+        : displayValue + digit  // otherwise we append
     ;
 }
 
@@ -35,7 +36,7 @@ function inputDecimal(dot) {
     const {displayValue} = calculator;
 
     if (!calculator.displayValue.includes(dot)) {
-        if (calculator.displayValue === "0") {
+        if (calculator.isEvaluated) {
             calculator.displayValue = dot;
         } else {
             calculator.displayValue = displayValue + dot;
@@ -49,6 +50,7 @@ function evaluate() {
 
 function resetCalculator() {
     calculator.displayValue = "0";
+    calculator.isEvaluated = true;
 }
 
 const keys = document.querySelector(".calculator-keys");
@@ -59,32 +61,36 @@ keys.addEventListener("click", (event) => {
     if (!target.matches("button")) {
         return;
     }
-      
+
     if (target.classList.contains("operator")) {
         inputOperator(target.value);
         updateDisplay();
+        calculator.isEvaluated = false; // pressing a new key means the new expression is not evaluated yet
         return;
     }
       
-    if (target.classList.contains("decimal")) {
+    if (target.classList.contains("decimal")) { // JUST NEED TO FIX TWO DECIMAL ISSUES - floating point precision + multiple decimals
         inputDecimal(target.value);
         updateDisplay();
+        calculator.isEvaluated = false; // pressing a new key means the new expression is not evaluated yet
         return;
     }
 
     if (target.classList.contains("equal-sign")) {
         evaluate();
         updateDisplay();
-        resetCalculator();
+
+        calculator.isEvaluated = true;
         return;
     }
     
     if (target.classList.contains("all-clear")) {
-        resetCalculator();
+        resetCalculator();  // resets calculator object back to default
         updateDisplay();
         return;
     }
     
     inputDigit(target.value);
     updateDisplay();
+    calculator.isEvaluated = false; // pressing a new key means the new expression is not evaluated yet
  });
