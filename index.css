@@ -39,12 +39,12 @@ body {
     align-items: flex-end;
 
     width: 100%;
+    padding: 1px;
     font-size: 5rem;
     height: 80px;
     border: none;
     color: #5E1C0D;
     text-align: right;
-    font-family: "Lobster", Arial, Helvetica, sans-serif;
   }
 
   .calculator-screen-wrapper {
