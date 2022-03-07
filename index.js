@@ -1,72 +1,90 @@
 const calculator = {
-    displayValue: '0',
-    prevType: 'digit'
+    displayValue: "0",
 };
 
 function updateDisplay() {
-    const display = document.querySelector('.calculator-screen');
-    display.innerHTML = calculator.displayValue;
+    const display = document.querySelector(".calculator-screen");
+    console.log("Currently: " + calculator.displayValue);
+    display.innerHTML = calculator.displayValue.toString()
+        .replace(/([\/*+-])(?=\d)/g, " $1 ")
+        .replace(/([\/*+-])$/g, " $1")
+        .replaceAll("*", "&times")
+        .replaceAll("/", "&divide");
 }
+updateDisplay();
 
 function inputDigit(digit) {
     const {displayValue} = calculator;
 
-    calculator.displayValue = (displayValue === '0') 
+    calculator.displayValue = (displayValue === "0") 
         ? digit 
-        : calculator.prevType === 'operator' ? displayValue + ' ' + digit : displayValue + digit 
+        : displayValue + digit 
     ;
-    calculator.prevType = 'digit';
 }
 
 function inputOperator(operator) {
     const {displayValue} = calculator;
     
-    calculator.displayValue = (calculator.prevType === 'operator')
+    calculator.displayValue = (displayValue.slice(-1).match(/[\/*+-]/))
         ? displayValue.slice(0, -1) + operator
-        : displayValue + ' ' + operator
+        : displayValue + operator
     ;
-
-    calculator.prevType = 'operator';
 }
 
 function inputDecimal(dot) {
     const {displayValue} = calculator;
 
     if (!calculator.displayValue.includes(dot)) {
-        calculator.displayValue = calculator.prevType === 'operator' ? displayValue + ' ' + dot : displayValue + dot;
+        if (calculator.displayValue === "0") {
+            calculator.displayValue = dot;
+        } else {
+            calculator.displayValue = displayValue + dot;
+        }
     }
-    calculator.prevType = 'decimal';
 }
 
+function evaluate() {
+    calculator.displayValue = eval(calculator.displayValue).toString();
+}
 
-updateDisplay();
+function resetCalculator() {
+    calculator.displayValue = "0";
+}
 
-const keys = document.querySelector('.calculator-keys');
-keys.addEventListener('click', (event) => {
+const keys = document.querySelector(".calculator-keys");
+keys.addEventListener("click", (event) => {
     const { target } = event;
 
     // return if the clicked element is not a button
-    if (!target.matches('button')) {
+    if (!target.matches("button")) {
         return;
-      }
+    }
       
-      if (target.classList.contains('operator')) {
+    if (target.classList.contains("operator")) {
         inputOperator(target.value);
         updateDisplay();
         return;
-      }
+    }
       
-      if (target.classList.contains('decimal')) {
+    if (target.classList.contains("decimal")) {
         inputDecimal(target.value);
         updateDisplay();
         return;
-      }
-    
-      if (target.classList.contains('all-clear')) {
-        console.log('clear', target.value);
+    }
+
+    if (target.classList.contains("equal-sign")) {
+        evaluate();
+        updateDisplay();
+        resetCalculator();
         return;
-      }
+    }
     
-      inputDigit(target.value);
-      updateDisplay();
+    if (target.classList.contains("all-clear")) {
+        resetCalculator();
+        updateDisplay();
+        return;
+    }
+    
+    inputDigit(target.value);
+    updateDisplay();
  });
