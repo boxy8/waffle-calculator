@@ -45,7 +45,7 @@ function inputDecimal(dot) {
 }
 
 function evaluate() {
-    calculator.displayValue = Math.round(eval(calculator.displayValue) * 1e10) / 1e10;
+    calculator.displayValue = (Math.round(eval(calculator.displayValue) * 1e10) / 1e10).toString();
 }
 
 function resetCalculator() {
