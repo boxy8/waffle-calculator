@@ -35,7 +35,7 @@ function inputOperator(operator) {
 function inputDecimal(dot) {
     const {displayValue} = calculator;
 
-    if (!calculator.displayValue.includes(dot)) {
+    if (!(/\.\d*$/).test(calculator.displayValue)) {    // prevent invalid decimal points
         if (calculator.isEvaluated) {
             calculator.displayValue = dot;
         } else {
@@ -45,7 +45,7 @@ function inputDecimal(dot) {
 }
 
 function evaluate() {
-    calculator.displayValue = eval(calculator.displayValue).toString();
+    calculator.displayValue = Math.round(eval(calculator.displayValue) * 1e10) / 1e10;
 }
 
 function resetCalculator() {
@@ -69,7 +69,7 @@ keys.addEventListener("click", (event) => {
         return;
     }
       
-    if (target.classList.contains("decimal")) { // JUST NEED TO FIX TWO DECIMAL ISSUES - floating point precision + multiple decimals
+    if (target.classList.contains("decimal")) {
         inputDecimal(target.value);
         updateDisplay();
         calculator.isEvaluated = false; // pressing a new key means the new expression is not evaluated yet
@@ -77,6 +77,11 @@ keys.addEventListener("click", (event) => {
     }
 
     if (target.classList.contains("equal-sign")) {
+        // return if the expression isn't valid i.e. doesn't end in a number
+        if (calculator.displayValue.slice(-1).match(/[\/*+-.]/)) {
+            return;
+        }
+        
         evaluate();
         updateDisplay();
 
