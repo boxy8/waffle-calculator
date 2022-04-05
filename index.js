@@ -16,10 +16,12 @@ updateDisplay();
 
 function inputDigit(digit) {
     const {displayValue} = calculator;
-    calculator.displayValue = (calculator.isEvaluated)    // if expression has been evaluated (or is 0 from beginning)
-        ? digit // then we replace the current number 
-        : displayValue + digit  // otherwise we append
-    ;
+    if (calculator.isEvaluated) {    // if expression has been evaluated (or is 0 from beginning)
+        calculator.displayValue = digit; // then we replace the current number
+        calculator.preciseValue = 0; // reset preciseValue 
+    } else {
+        calculator.displayValue = displayValue + digit;  // otherwise we append
+    }
 }
 
 function inputOperator(operator) {
