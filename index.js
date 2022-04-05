@@ -55,6 +55,7 @@ function evaluate() {
 
 function resetCalculator() {
     calculator.displayValue = "0";
+    calculator.preciseValue = 0;
     calculator.isEvaluated = true;
 }
 
