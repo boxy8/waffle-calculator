@@ -47,7 +47,7 @@ function inputDecimal(dot) {
 
 function evaluate() {
     calculator.preciseValue = (calculator.preciseValue != 0)
-        ? eval(calculator.displayValue.replace(/^[^\/*+-]*/, calculator.preciseValue.toString()))
+        ? eval(calculator.displayValue.replace(/^[^\/*+-]+/, calculator.preciseValue.toString()))
         : eval(calculator.displayValue)
     ;
    calculator.displayValue = (Math.round(calculator.preciseValue * 1e10) / 1e10).toString();
