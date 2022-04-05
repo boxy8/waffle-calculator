@@ -1,12 +1,12 @@
 const calculator = {
     displayValue: "0",
+    preciseValue: 0,
     isEvaluated: true
 };
 
 function updateDisplay() {
     const display = document.querySelector(".calculator-screen");
-    console.log("Currently: " + calculator.displayValue);
-    display.innerHTML = calculator.displayValue.toString()
+    display.innerHTML = calculator.displayValue
         .replace(/([\/*+-])(?=\d)/g, " $1 ")
         .replace(/([\/*+-])$/g, " $1")
         .replaceAll("*", "&times")
@@ -16,7 +16,6 @@ updateDisplay();
 
 function inputDigit(digit) {
     const {displayValue} = calculator;
-    console.log("isEvaluted = ", calculator.isEvaluated);
     calculator.displayValue = (calculator.isEvaluated)    // if expression has been evaluated (or is 0 from beginning)
         ? digit // then we replace the current number 
         : displayValue + digit  // otherwise we append
@@ -45,7 +44,11 @@ function inputDecimal(dot) {
 }
 
 function evaluate() {
-    calculator.displayValue = (Math.round(eval(calculator.displayValue) * 1e10) / 1e10).toString();
+    calculator.preciseValue = (calculator.preciseValue != 0)
+        ? eval(calculator.displayValue.replace(/^[^\/*+-]*/, calculator.preciseValue.toString()))
+        : eval(calculator.displayValue)
+    ;
+   calculator.displayValue = (Math.round(calculator.preciseValue * 1e10) / 1e10).toString();
 }
 
 function resetCalculator() {
